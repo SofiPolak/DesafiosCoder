@@ -6,9 +6,15 @@ class ProductManager {
 
     addProduct(title, description, price, thumbnail, code, stock){
 
-        const codeExiste = this.products.find((p) => p.code === code)
+        const codeExiste = this.products.find((p) => p.code === code);
+
         if (codeExiste) {
             console.log("El código ya existe.");
+            return;
+        }
+
+        if (!title || !description || !price || !thumbnail || !code || !stock){
+            console.log("Todos los datos del producto son obligatorios.");
             return;
         }
 

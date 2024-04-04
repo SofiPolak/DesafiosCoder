@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --watch desafio1/desafio1.js"
+    "start": "node --watch desafio2/ProductManager.js"
   },
   "author": "",
   "license": "ISC",

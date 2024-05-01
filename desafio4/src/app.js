@@ -1,9 +1,12 @@
 import express, { json, urlencoded } from "express";
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
-import viewsRouter from './routes/views.router.js';
 import { Server } from 'socket.io';
 import productsRouter from "./routes/products.router.js";
+import viewsRouter from './routes/views.router.js';
+
+import ProductManager from "./ProductManager.js";
+const productManager = new ProductManager();
 
 const app = express();
 const PORT = 8080;
@@ -12,28 +15,45 @@ const socketServer = new Server(httpServer);
 
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use("/api/", productsRouter);
-
-app.use("/realTimeProducts", viewsRouter); //???
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
+
 app.use('/', viewsRouter);
+//app.use("/api/", productsRouter);
+app.use("/", productsRouter);
 
-/*app.use((req, res, next) => {
-    req.context = { socketServer };
-    next();
-  });
+socketServer.on('connection', socket => {
+    console.log("Cliente conectado");
 
-const newProduct = [];
+    productManager.checkProducts()
+    .then(products => {
 
-socketServer.on("connection", (socket) => {
-  console.log(`Se conectó el usuario con socket id: ${socket.id}`);
+        socketServer.emit('products', products)
+        socketServer.emit('productsRealTime', products)
+    })
 
-  socket.on("product", (data) => {
-    newProduct.push({ socketid: socket.id, product: data });
-    socketServer.emit("product", newProduct);
-  });
-});*/
+    socket.on('addProduct', (data)=> {
+        productManager.addProduct( data.title, data.description, data.price, data.thumbnail, data.code, data.stock, data.category)
+        .then(() => {
+            productManager.checkProducts()
+            .then(products => {
+                socketServer.emit('productsRealTime', products)
+            })
+        })
+
+    })
+
+
+    socket.on('deleteProduct', (data) => {
+        productManager.deleteProduct(data)
+        .then(() => {
+            productManager.checkProducts()
+            .then((products) =>{
+                socketServer.emit('productsRealTime', products)
+            })
+        })
+    })
+})

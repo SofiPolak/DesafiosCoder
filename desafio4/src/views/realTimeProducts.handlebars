@@ -1,40 +1,36 @@
-<h2>Agregar producto</h2>
-<form action="/realtimeproducts" method="POST">
-  <label for="title">Título:</label>
-  <input type="text" id="title" placeholder="Nombre del producto"/>
+<section style="display: flex;">
+    <section style="width: 50%;">
+        <h1>Todos los productos</h1>
+        <div>
+            <ol id="productsRealTime">
 
-  <label for="description">Descripción:</label>
-  <textarea id="description" placeholder="Descripción del producto"></textarea>
+            </ol>
+        </div>
+    </section>
+    <section style="max-width: 0%;">
+        <div>
+            <h1>Nuevo producto</h1>
 
-  <label for="img">URL de la imagen:</label>
-  <input type="text" id="img" placeholder="URL de la imagen"/>
+            <label for="title"> Titulo</label>
+            <input type="text" name="title" id="title">
+            <label for="description"> Descripcion</label>
+            <input type="text" name="decription" id="description">
+            <label for="price"> Precio</label>
+            <input type="text" name="price" id="price">
+            <label for="thumbnail"> URL</label>
+            <input type="text" name="thumbnail" id="thumbnail">
+            <label for="code"> Codigo</label>
+            <input type="text" name="code" id="code">
+            <label for="stock"> Stock</label>
+            <input type="text" name="stock" id="stock">
+            <label for="category"> Categoria</label>
+            <input type="text" name="category" id="category">            
+            <button type="submit" id="btn-send">Agregar</button>
 
-  <label for="price">Precio:</label>
-  <input type="number" id="price" placeholder="Precio del producto"/>
+        </div>
+    </section>
+</section>
 
-  <label for="code">Código:</label>
-  <input type="text" id="code" placeholder="Código del producto"/>
-
-  <label for="stock">Stock:</label>
-  <input type="number" id="stock" placeholder="Stock disponible"/>
-
-  <button type="submit">Agregar Producto</button>
-</form>
-
-
-
-{{#each products}}
-  <p>{{this.title}}</p>
-{{/each}}
-
-<ul id="productList"></ul>
-
-<h2>Eliminar producto</h2>
-<form action="/realtimeproducts" method="DELETE">
-  <label for="productId">Id del Producto</label>
-  <input type="text" id="productId"/>
-  <button type="submit">Eliminar Producto</button>
-</form>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/index.js"></script>
+<script src="/js/realTimeProducts.js"></script>

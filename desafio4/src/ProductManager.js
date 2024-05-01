@@ -9,19 +9,19 @@ class ProductManager {
         this.path = 'Products.json'
     }
 
-    async addProduct(newProduct) {
+    async addProduct(title, description, price, thumbnail, code, stock, category) {
 
         try {
 
-            let { title, description, price, thumbnail, code, stock } = newProduct;
+            const products = await this.checkProducts();
 
-            const codeExiste = this.products.find((p) => p.code === code);
+            const codeExiste = products.find((p) => p.code === code);
 
             if (codeExiste) {
                 return "El código ya existe";
             }
 
-            if (!title || !description || !price || !code || !stock) {
+            if (!title || !description || !price || !code || !stock || !category) {
                 return "Faltan datos del producto que son obligatorios";
             }
 
@@ -34,11 +34,13 @@ class ProductManager {
                 thumbnail,
                 code,
                 stock,
-                id: productoId
+                id: productoId,
+                category,
+                status: true
             }
 
-            this.products.push(product);
-            await fs.writeFile(this.path, JSON.stringify(this.products, null, 2));
+            products.push(product);
+            await fs.writeFile(this.path, JSON.stringify(products, null, 2));
             return product;
 
         } catch (error) {
@@ -127,143 +129,5 @@ class ProductManager {
     }
 
 }
-/*
-const productManager = new ProductManager();
-
-async function mostrarProductos() {
-    const productosMostrar = await productManager.getProducts();
-    console.log(productosMostrar);
-}
-
-const product1 = {
-
-    title: "producto prueba",
-    description: "Este es un producto prueba",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc123",
-    stock: 25,
-    category: "CategoriaA"
-}
-
-const product2 = {
-
-    title: "producto prueba2",
-    description: "Este es un producto prueba2",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc122",
-    stock: 25,
-    category: "CategoriaA"
-}
-
-const product3 = {
-
-    title: "producto prueba3",
-    description: "Este es un producto prueba3",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc124",
-    stock: 25,
-    category: "CategoriaA"
-}
-
-const product4 = {
-
-    title: "producto prueba4",
-    description: "Este es un producto prueba4",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc125",
-    stock: 25,
-    category: "CategoriaA"
-}
-
-const product5 = {
-
-    title: "producto prueba5",
-    description: "Este es un producto prueba5",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc126",
-    stock: 25,
-    category: "CategoriaA"
-}
-
-const product6 = {
-
-    title: "producto prueba6",
-    description: "Este es un producto prueba6",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc127",
-    stock: 25,
-    category: "CategoriaB"
-}
-
-const product7 = {
-
-    title: "producto prueba7",
-    description: "Este es un producto prueba7",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc128",
-    stock: 25,
-    category: "CategoriaB"
-}
-const product8 = {
-
-    title: "producto prueba8",
-    description: "Este es un producto prueba8",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc129",
-    stock: 25,
-    category: "CategoriaB"
-}
-
-const product9 = {
-
-    title: "producto prueba9",
-    description: "Este es un producto prueba9",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc110",
-    stock: 25,
-    category: "CategoriaB"
-}
-
-const product10 = {
-
-    title: "producto prueba10",
-    description: "Este es un producto prueba10",
-    price: 200,
-    thumbnail: "Sin Imagen",
-    code: "abc111",
-    stock: 25,
-    category: "CategoriaB"
-}
-
-productManager.addProduct(product1);
-productManager.addProduct(product2);
-productManager.addProduct(product3);
-productManager.addProduct(product4);
-productManager.addProduct(product5);
-productManager.addProduct(product6);
-productManager.addProduct(product7);
-productManager.addProduct(product8);
-productManager.addProduct(product9);
-productManager.addProduct(product10);
-
-productManager.addProduct(product1);
-
-productManager.getProductById(3);
-
-productManager.getProductById(1);
-
-productManager.updateProduct(1, { stock: 12 });
-
-productManager.deleteProduct(1);
-*/
 
 export default ProductManager;

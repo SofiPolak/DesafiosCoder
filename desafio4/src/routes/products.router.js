@@ -1,9 +1,15 @@
 import { Router } from "express";
 const router = Router();
 
-import ProductManager from "../ProductManager.js";
-const productManager = new ProductManager();
+//import ProductManager from "../ProductManager.js";
+//const productManager = new ProductManager();
 
+router.get("/", (req, res) => {
+
+        res.render('home', {})
+})
+
+/*
 router.get("/products", async (req, res) => {
 
     try {
@@ -72,6 +78,6 @@ router.delete("/products/:pid", async (req, res) => {
         res.status(404).json({ message: "Error, no se pudo eliminar el producto" });
     }
 
-})
+})*/
 
 export default router;

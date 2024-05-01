@@ -1,0 +1,40 @@
+<h2>Agregar producto</h2>
+<form action="/realtimeproducts" method="POST">
+  <label for="title">Título:</label>
+  <input type="text" id="title" placeholder="Nombre del producto"/>
+
+  <label for="description">Descripción:</label>
+  <textarea id="description" placeholder="Descripción del producto"></textarea>
+
+  <label for="img">URL de la imagen:</label>
+  <input type="text" id="img" placeholder="URL de la imagen"/>
+
+  <label for="price">Precio:</label>
+  <input type="number" id="price" placeholder="Precio del producto"/>
+
+  <label for="code">Código:</label>
+  <input type="text" id="code" placeholder="Código del producto"/>
+
+  <label for="stock">Stock:</label>
+  <input type="number" id="stock" placeholder="Stock disponible"/>
+
+  <button type="submit">Agregar Producto</button>
+</form>
+
+
+
+{{#each products}}
+  <p>{{this.title}}</p>
+{{/each}}
+
+<ul id="productList"></ul>
+
+<h2>Eliminar producto</h2>
+<form action="/realtimeproducts" method="DELETE">
+  <label for="productId">Id del Producto</label>
+  <input type="text" id="productId"/>
+  <button type="submit">Eliminar Producto</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

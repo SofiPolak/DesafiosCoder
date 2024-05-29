@@ -24,16 +24,16 @@ router.get('/carts/:cid', async(req, res) => {
     res.render('carts', {products: result});
 })
 
-router.get('/login', /*isNotAuthenticated,*/ (req, res) => {
+router.get('/login', isNotAuthenticated, (req, res) => {
     res.render('login');
 });
 
-router.get('/register', /*isNotAuthenticated,*/ (req, res) => {
+router.get('/register', isNotAuthenticated, (req, res) => {
     res.render('register');
 });
 
-router.get('/profile', /*isAuthenticated,*/ (req, res) => {
-    res.render('profile', { user });
+router.get('/profile', isAuthenticated, (req, res) => {
+    res.render('profile', { user: req.session.user });
 });
 
 export default router

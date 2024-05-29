@@ -31,13 +31,6 @@ app.engine('hbs', engine({
 app.set('view engine', 'hbs');
 app.set('views', '../src/views');
 
-app.use('/api/carts', cartRouter)
-app.use('/api/products', productRouter)
-app.use('/', viewsRouter)
-app.use('/api/sessions', sessionsRouter);
-
-const httpServer = app.listen(PORT, console.log(`Server running on port ${PORT}`));
-
 app.use(session({
     secret: 'secretkey',
     resave: false,
@@ -45,3 +38,10 @@ app.use(session({
     store: MongoStore.create({ mongoUrl: process.env.MONGODB }),
     // cookie: { maxAge: 180 * 60 * 1000 },
 }));
+
+app.use('/api/carts', cartRouter)
+app.use('/api/products', productRouter)
+app.use('/', viewsRouter)
+app.use('/api/sessions', sessionsRouter);
+
+const httpServer = app.listen(PORT, console.log(`Server running on port ${PORT}`));

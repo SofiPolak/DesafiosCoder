@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email, password });
         if (!user) return res.status(404).send('Usuario no encontrado');
         if(user.email == "adminCoder@coder.com" && user.password == "adminCod3r123"){
             user.role = "admin";

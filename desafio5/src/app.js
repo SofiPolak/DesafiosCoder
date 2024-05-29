@@ -9,7 +9,8 @@ import session from 'express-session';
 //import bodyParser from 'body-parser';
 import mongoose from './config/database.js';
 import MongoStore from 'connect-mongo';
-import sessionsRouter from './routes/sessions.router.js';
+import sessionsRouter from './routes/api/sessions.router.js';
+import { engine } from 'express-handlebars';
 dotenv.config()
 
 const app = express()
@@ -18,10 +19,17 @@ const PORT = process.env.PORT
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.engine('handlebars', handlebars.engine());
+/*app.engine('handlebars', handlebars.engine());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'handlebars');
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));*/
+
+app.engine('hbs', engine({
+    extname: '.hbs',
+    defaultLayout: 'main',
+}));
+app.set('view engine', 'hbs');
+app.set('views', '../src/views');
 
 app.use('/api/carts', cartRouter)
 app.use('/api/products', productRouter)

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import User from '../dao/models/users.model.js';
+import User from '../../dao/models/users.model.js';
 
 const router = Router();
 
@@ -16,11 +16,12 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    console.log(email, password)
+    //console.log(email, password)
     try {
         const user = await User.findOne({ email });
-        console.log(user)
+        //console.log(user)
         if (!user) return res.status(404).send('Usuario no encontrado');
+        //console.log(user)
         req.session.user = {
             id: user._id,
             first_name: user.first_name,
@@ -28,7 +29,7 @@ router.post('/login', async (req, res) => {
             email: user.email,
             age: user.age,
         };
-        console.log(req.session.user)
+        //console.log(req.session.user)
         res.redirect('/profile');
 
     } catch (err) {

@@ -14,7 +14,6 @@ router.get('/products', async (req, res) => {
     result.prevLink = result.hasPrevPage?`http://localhost:8080/products?page=${result.prevPage}`:'';
     result.nextLink = result.hasNextPage?`http://localhost:8080/products?page=${result.nextPage}`:'';
     result.isValid= !(page<=0||page>result.totalPages)
-    console.log(result);
     res.render('products', result)
 })
 
@@ -25,16 +24,16 @@ router.get('/carts/:cid', async(req, res) => {
     res.render('carts', {products: result});
 })
 
-router.get('/login', isNotAuthenticated, (req, res) => {
+router.get('/login', /*isNotAuthenticated,*/ (req, res) => {
     res.render('login');
 });
 
-router.get('/register', isNotAuthenticated, (req, res) => {
+router.get('/register', /*isNotAuthenticated,*/ (req, res) => {
     res.render('register');
 });
 
-router.get('/profile', isAuthenticated, (req, res) => {
-    res.render('profile', { user: req.session.user });
+router.get('/profile', /*isAuthenticated,*/ (req, res) => {
+    res.render('profile', { user });
 });
 
 export default router

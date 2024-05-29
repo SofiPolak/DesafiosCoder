@@ -19,14 +19,20 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) return res.status(404).send('Usuario no encontrado');
+        if(user.email == "adminCoder@coder.com" && user.password == "adminCod3r123"){
+            user.role = "admin";
+        }else{
+            user.role = "user";
+        }
         req.session.user = {
             id: user._id,
             first_name: user.first_name,
             last_name: user.last_name,
             email: user.email,
             age: user.age,
+            role: user.role
         };
-        res.redirect('/profile');
+        res.redirect('/products');
 
     } catch (err) {
         res.status(500).send('Error al iniciar sesión');

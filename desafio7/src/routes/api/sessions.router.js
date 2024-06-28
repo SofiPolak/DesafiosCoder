@@ -1,5 +1,11 @@
 import { Router } from 'express';
 import passport from 'passport';
+import __dirname from '../../utils.js';
+import dotenv from 'dotenv';
+import path from 'path';
+
+const envPath = path.resolve(__dirname, 'src', '.env');
+dotenv.config({ path: envPath });
 
 const router = Router();
 
@@ -17,7 +23,7 @@ router.post('/login', passport.authenticate('login', { failureRedirect: 'faillog
     if (!req.user) return res.status(400).send({ status: "error", error: "Datos incompletos" })
     try {
         let role = "user";
-        if(req.user.email == "adminCoder@coder.com"){
+        if(req.user.email == process.env.ADMIN_EMAIL){
             role = "admin";
         }
         req.session.user = {
@@ -50,7 +56,7 @@ router.get("/github", passport.authenticate("github",{scope:["user:email"]}),asy
 
 router.get("/githubcallback",passport.authenticate("github",{failureRedirect:"/login"}),async(req,res)=>{
     let role = "user";
-        if(req.user.email == "adminCoder@coder.com"){
+        if(req.user.email == process.env.ADMIN_EMAIL){
             role = "admin";
         }
         req.session.user = {

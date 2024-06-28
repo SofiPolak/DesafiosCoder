@@ -13,6 +13,7 @@ import sessionsRouter from './routes/api/sessions.router.js';
 import { engine } from 'express-handlebars';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
+import path from 'path';
 dotenv.config()
 
 const app = express()
@@ -26,7 +27,7 @@ app.engine('hbs', engine({
     defaultLayout: 'main',
 }));
 app.set('view engine', 'hbs');
-app.set('views', '../src/views');
+app.set('views', path.resolve(__dirname, './views'));
 
 app.use(session({
     secret: 'secretkey',

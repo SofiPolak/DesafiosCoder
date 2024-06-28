@@ -4,7 +4,12 @@ import userService from '../dao/models/users.model.js'
 import cartService from '../dao/models/cart.model.js'
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from 'passport-github2';
+import path from 'path';
+import __dirname from '../utils.js';
+import dotenv from 'dotenv'
 
+const envPath = path.resolve(__dirname, 'src', '.env');
+dotenv.config({ path: envPath });
 
 const LocalStrategy = local.Strategy
 
@@ -39,6 +44,8 @@ const initializePassport = () => {
     passport.use('github', new GitHubStrategy({
         clientID: "Iv23liyy5dDp25mioyfc",
         clientSecret: "2eade64c4c72cd3cdf2fe603e279a3168bf6294a",
+        //clientID: process.env.clientID,
+        //clientSecret: process.env.clientSecret,
         callbackURL: "http://localhost:8080/api/sessions/githubcallback"
     }, async (accessToken, refreshToken, profile, done) => {
         try {

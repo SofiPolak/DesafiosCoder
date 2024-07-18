@@ -1,6 +1,7 @@
 import { Router } from "express";
 import productController from "../../controllers/products.controller.js";
 import { isAdmin } from '../../middlewares/auth.js';
+import { generateProducts } from "../../utils.js"
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -39,5 +40,9 @@ router.delete('/:pid', isAdmin, async (req, res) => {
     res.send({ result: "success", payload: result });
 })
 
+router.get('/mock/mockingproducts', async (req, res) => {
+    const result = generateProducts();
+    res.send({ result: "success", payload: result })
+})
 
 export default router;

@@ -1,6 +1,9 @@
 import { Router } from "express";
 import cartController from "../../controllers/carts.controller.js";
 import { isUser } from '../../middlewares/auth.js';
+import { addProductCartErrorInfo } from "../../services/errors/info.js";
+import EErrors from "../../services/errors/enum.js";
+import CustomError from "../../services/errors/CustomError.js";
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -35,11 +38,23 @@ router.delete('/:cid/products/:pid', async (req, res) => {
 })
 
 router.put('/:cid/products/:pid', async (req, res) => {
-    let cid = req.params.cid;
-    let pid = req.params.pid;
-    let prodQuantity = req.body.quantity;
-    const result = await cartController.updateQuantityProduct(cid, pid, prodQuantity);
-    res.send({ result: "success", payload: result });
+    try {
+        let cid = req.params.cid;
+        let pid = req.params.pid;
+        let prodQuantity = req.body.quantity;
+        if (prodQuantity <= 0) {
+            CustomError.createError({
+                name: "Error en agregado de producto al carrito",
+                cause: addProductCartErrorInfo(prodQuantity),
+                message: "Error al agregar un producto al carrito",
+                code: EErrors.INVALID_TYPES_CART_ERROR
+            })
+        }
+        const result = await cartController.updateQuantityProduct(cid, pid, prodQuantity);
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        res.send({ status: "error", error: error.message, cause: error.cause })
+    }
 })
 
 router.delete('/:cid', async (req, res) => {

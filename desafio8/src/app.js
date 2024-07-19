@@ -17,6 +17,7 @@ import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 import path from 'path';
 import { Server } from 'socket.io';
+import errorHandler from "./middlewares/errors.js"
 dotenv.config()
 
 const app = express()
@@ -51,6 +52,7 @@ app.use('/api/products', productRouter)
 app.use('/', viewsRouter)
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/messages', messageRouter)
+app.use(errorHandler)
 
 const httpServer = app.listen(PORT, console.log(`Server running on port ${PORT}`));
 const socketServer = new Server(httpServer);

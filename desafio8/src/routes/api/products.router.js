@@ -2,6 +2,9 @@ import { Router } from "express";
 import productController from "../../controllers/products.controller.js";
 import { isAdmin } from '../../middlewares/auth.js';
 import { generateProducts } from "../../utils.js"
+import { generateProductErrorInfo } from "../../services/errors/info.js";
+import EErrors from "../../services/errors/enum.js";
+import CustomError from "../../services/errors/CustomError.js";
 const router = Router();
 
 router.get('/', async (req, res) => {
@@ -16,12 +19,22 @@ router.get('/:pid', async (req, res) => {
 })
 
 router.post('/', isAdmin, async (req, res) => {
-    let { title, description, price, thumbnail, code, stock, available, category } = req.body
-    if (!title || !description || !price || !thumbnail || !code || !stock || !available || !category) {
-        res.send({ status: "error", error: "Faltan parametros" })
+    try {
+        let { title, description, price, thumbnail, code, stock, available, category } = req.body
+        if (!title || !description || !price || !thumbnail || !code || !stock || !available || !category) {
+            CustomError.createError({
+                name: "Error en creacion del producto",
+                cause: generateProductErrorInfo({ title, description, price, thumbnail, code, stock, available, category }),
+                message: "Error al crear un producto",
+                code: EErrors.INVALID_TYPES_PRODUCT_ERROR
+            })
+            //res.send({ status: "error", error: "Faltan parametros" })
+        }
+        const result = await productController.addProduct(title, description, price, thumbnail, code, stock, available, category);
+        res.send({ result: "success", payload: result });
+    } catch (error) {
+        res.send({ status: "error", error: error.message, cause: error.cause })
     }
-    const result = await productController.addProduct(title, description, price, thumbnail, code, stock, available, category);
-    res.send({ result: "success", payload: result });
 })
 
 router.put('/:pid', isAdmin, async (req, res) => {

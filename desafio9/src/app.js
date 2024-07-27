@@ -5,6 +5,7 @@ import cartRouter from './routes/api/carts.router.js'
 import productRouter from './routes/api/products.router.js'
 import viewsRouter from './routes/views.router.js'
 import messageRouter from './routes/api/messages.router.js'
+import loggerRouter from './routes/logger.router.js'
 import MessageManager from "./dao/db/messageManager.js";
 import dotenv from 'dotenv'
 import session from 'express-session';
@@ -18,6 +19,7 @@ import initializePassport from './config/passport.config.js';
 import path from 'path';
 import { Server } from 'socket.io';
 import errorHandler from "./middlewares/errors.js"
+import { addLogger } from "./utils/logger.js";
 dotenv.config()
 
 const app = express()
@@ -46,7 +48,9 @@ app.use(session({
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(addLogger);
 
+app.use('/loggerTest', loggerRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/products', productRouter)
 app.use('/', viewsRouter)

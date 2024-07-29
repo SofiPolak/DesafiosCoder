@@ -15,6 +15,7 @@ router.post('/register', passport.authenticate('register', { failureRedirect: 'f
 
 router.get('/failregister', async (req, res) => {
     console.log("Estrategia fallida")
+    req.logger.fatal("Hubo un fallo en el registro del usuario");
     res.send({ error: "Falló" })
 })
 
@@ -33,10 +34,12 @@ router.post('/login', passport.authenticate('login', { failureRedirect: 'faillog
             age: req.user.age,
             role
         };
+        req.logger.info("Se muestra la cookie");
         console.log(req.headers.cookie.replace("connect.sid=", ""));
         res.redirect('/products');
 
     } catch (err) {
+        req.logger.error("Se produjo un error al iniciar sesion");
         res.status(500).send('Error al iniciar sesión');
     }
 });
@@ -67,6 +70,7 @@ router.get("/githubcallback", passport.authenticate("github", { failureRedirect:
         age: req.user.age,
         role
     };
+    req.logger.info("Se inicia sesion y se redirige a productos");
     res.redirect("/products")
 })
 

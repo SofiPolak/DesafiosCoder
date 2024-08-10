@@ -21,10 +21,23 @@ import path from 'path';
 import { Server } from 'socket.io';
 import errorHandler from "./middlewares/errors.js"
 import { addLogger } from "./utils/logger.js";
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: "Documentacion",
+            description: "Api Coder"
+        }
+    },
+    apis: [path.join(__dirname, 'docs/**/*.yaml')]
+}
 
 const messageManager = new MessageManager();
 
@@ -59,6 +72,9 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/api/messages', messageRouter)
 app.use('/api/users', userRouter)
 app.use(errorHandler)
+
+const specs = swaggerJsdoc(swaggerOptions)
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 const httpServer = app.listen(PORT, console.log(`Server running on port ${PORT}`));
 const socketServer = new Server(httpServer);
